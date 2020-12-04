@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "909594106536",
+    "project_id": "covix-b432f",
+    "storage_bucket": "covix-b432f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909594106536:android:000464f4f42209fccf409d",
+        "android_client_info": {
+          "package_name": "com.example.COVIX"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "909594106536-f5709l3g57d3b9td883rr6cgajjj048c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAueL83RX8CVyvyVWf40UcjBcD08XiSnUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "909594106536-f5709l3g57d3b9td883rr6cgajjj048c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
