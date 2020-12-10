@@ -13,22 +13,16 @@ class TesterController extends GetxController {
 
 class LocationUpdates extends GetxController {
   var userLocation = Position().obs;
-  // var testerPosition = Position().altitude;
+  var otherUserLocation = Position().obs;
   var distanceBetweenThem = 0.0.obs;
+  var otherUserDistance = 0.0.obs;
+  var locationAccuracy = 1.0.obs;
 
   @override
   void onInit() {
-    print('chal rha hai bc');
-    // getLocation().then((poistion) {
-    //   print(poistion);
-    //   userLocation.value = poistion;
-    // });
-
-    // getLocationUpdates().then((position) {
-    //   print(position);
-    //   userLocation.value = position;
-    // });
-
+    sendLocationUpdates().then((position) {
+      print(position);
+    });
     super.onInit();
   }
 
@@ -43,32 +37,61 @@ class LocationUpdates extends GetxController {
     return currentLocation;
   }
 
-  Future<Position> getLocationUpdates() async {
+  Future<Position> sendLocationUpdates() async {
     Geolocator.getPositionStream(
             desiredAccuracy: LocationAccuracy.best,
             intervalDuration: Duration(seconds: 5))
         .listen(
       (position) {
         userLocation.value = position;
+        // distanceCalculator();
         // print(position);
         // print(Geolocator.distanceBetween(
         //     position.latitude, position.longitude, 28.7428265, 77.19888519));
-        distanceBetweenThem.value = Geolocator.distanceBetween(
-            28.74271335, 77.19878682, position.latitude, position.longitude);
-        sendLatLngToFireBaseDB(lat: position.latitude, lng: position.longitude);
+        // distanceBetweenThem.value = Geolocator.distanceBetween(
+        //     28.74271335, 77.19878682, position.latitude, position.longitude);
+        // sendLatLngToFireBaseDB(lat: position.latitude, lng: position.longitude);
       },
     );
   }
 
-
-
   void distanceCalculator() {
-    print(Geolocator.distanceBetween(28.742, 77.198, 28.7427, 77.1985));
+    distanceBetweenThem.value = Geolocator.distanceBetween(
+        userLocation.value.latitude,
+        userLocation.value.longitude,
+        otherUserLocation.value.latitude,
+        otherUserLocation.value.longitude);
+    print('hi');
+    print(distanceBetweenThem.value);
   }
 
   Future<void> sendLatLngToFireBaseDB({double lat, double lng}) async {
     await http.patch(URLClass().userLatLng,
         body: json.encode({'Lat': lat, 'Long': lng}));
+  }
+
+  Future<Position> getPositionSubscription() async {
+    final response = await http.get(URLClass().userLatLng);
+    final responseBody = json.decode(response.body);
+    Position tester = Position(
+        latitude: responseBody['Lat'], longitude: responseBody['Long']);
+    // print(tester);
+
+    return tester;
+
+    // print(response.body);
+  }
+
+  Stream<Position> productsStream() async* {
+    // print('chal rhga hai ');
+    while (true) {
+      await Future.delayed(Duration(seconds: 5));
+
+      Position userPosition = await getPositionSubscription();
+      otherUserLocation.value = await getPositionSubscription();
+      // print(userPosition);
+      yield userPosition;
+    }
   }
 }
 

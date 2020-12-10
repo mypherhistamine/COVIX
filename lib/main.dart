@@ -1,4 +1,5 @@
 
+import 'package:COVIX/view/screens/googleMaps2.dart';
 import 'package:COVIX/view/screens/tester.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: TesterScreen(),
+      home: GoogleMapsFinal()
     );
   }
 }
